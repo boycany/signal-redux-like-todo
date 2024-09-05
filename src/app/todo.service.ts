@@ -82,10 +82,10 @@ export class TodoService {
         tap((todos) => updateProperty(this.state, 'memberTodos', todos)),
         takeUntilDestroyed(),
       )
-      .subscribe(() => console.log(this.state()));
+      .subscribe(() => console.log('tasks: ', this.state()));
 
     effect(() => {
-      console.log('this.filteredTodos() :>> ', this.filteredTodos());
+      // console.log('this.filteredTodos() :>> ', this.filteredTodos());
     });
   }
 
@@ -114,8 +114,6 @@ export class TodoService {
 
   changeStatus(task: Todo, status: boolean) {
     //Mark the task as completed
-    // task.completed = status;
-
     const updatedTasks = this.todos().map((t) => {
       if (t.id === task.id) {
         return { ...t, completed: status };
@@ -158,8 +156,8 @@ export class TodoService {
       //Cut the length of the long string
       map((data) =>
         data.map((t) =>
-          t.title.length > 20
-            ? { ...t, title: t.title.substring(0, 20) + '...' }
+          t.title.length > 80
+            ? { ...t, title: t.title.substring(0, 80) + '...' }
             : t,
         ),
       ),

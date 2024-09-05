@@ -1,60 +1,59 @@
 <div class="container">
   @let member = selectedMember();
 
-  <h3>
+  <h3 class="text-center">
     {{ title }}
-    @if (member) {
-      for {{ member.name }}
-    }
   </h3>
 
   <div class="grid">
-    <div class="row">
-      <select class="select" (change)="onSelected($event.target)">
-        <option value="" disabled selected>--Select a team member--</option>
-        @for (member of members(); track member.id) {
-          <option [value]="member.id">{{ member.name }}</option>
-        }
-      </select>
+    <div class="text-center">
+      <mat-form-field>
+        <mat-label>Select a team member</mat-label>
+        <mat-select (valueChange)="onSelected($event)">
+          @for (member of members(); track member.id) {
+            <mat-option [value]="member.id">{{ member.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="row">
       @if (isLoading()) {
-        <p>Loading...</p>
+        <p id="loading">Loading...</p>
       }
       @if (!isLoading() && member) {
         @if (errorMessage()) {
           <p>{{ errorMessage() }}</p>
         } @else {
-          <h3>Tasks</h3>
-          <label>
-            <input
-              type="checkbox"
-              class="check"
-              (change)="onFilter($event.target)"
-            />
-            Show only incomplete tasks
-          </label>
-          <ul>
+          <div id="list-title-row">
+            <h3 id="list-title">{{ member.name }}'s Tasks</h3>
+            <div class="text-end">
+              <mat-slide-toggle
+                labelPosition="before"
+                (change)="onFilter($event.checked)"
+                [checked]="incompleteOnly()"
+              >
+                <span>Show only incomplete tasks</span>
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <mat-selection-list
+            #todoList
+            (selectionChange)="
+              onChangeStatus(
+                $event.options[0].value,
+                $event.options[0].selected
+              )
+            "
+          >
             @for (todo of todosForMember(); track todo.id) {
-              <li>
-                <label>
-                  {{ todo.title }}
-                  <!-- <input
-                    type="checkbox"
-                    [checked]="todo.completed"
-                    (change)="onChangeStatus(todo, $event.target)"
-                  /> -->
-                  <button (click)="onChangeStatus(todo, $event.target)">
-                    {{ todo.completed ? "Finished" : "To Do" }}
-                  </button>
-                </label>
-              </li>
+              <mat-list-option [value]="todo" [selected]="todo.completed">{{
+                todo.title
+              }}</mat-list-option>
             }
-          </ul>
+          </mat-selection-list>
         }
       }
     </div>
   </div>
 </div>
-
-<router-outlet />

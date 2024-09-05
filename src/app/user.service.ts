@@ -15,7 +15,7 @@ export class UserService {
 
   constructor() {
     effect(() => {
-      console.log('this.members() :>> ', this.members());
+      // console.log('this.members() :>> ', this.members());
     });
   }
 

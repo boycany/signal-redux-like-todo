@@ -1,12 +1,20 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { User, UserService } from './user.service';
+import { UserService } from './user.service';
 import { Todo, TodoService } from './todo.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    MatListModule,
+    MatSlideToggleModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -25,24 +33,19 @@ export class AppComponent {
   selectedMember = this.todoService.currentMember;
   todosForMember = this.todoService.filteredTodos;
   errorMessage = this.todoService.errorMessage;
-  incompleteOnly = signal(false);
+  incompleteOnly = this.todoService.incompleteOnly;
 
   //Actions
-  onSelected(ele: EventTarget | null) {
-    const id = parseInt((ele as HTMLSelectElement).value);
-    console.log('id :>> ', id);
+  onSelected(id: number) {
     this.todoService.setMemberId(id);
   }
 
-  onFilter(ele: EventTarget | null) {
-    const filter = (ele as HTMLInputElement).checked;
+  onFilter(filter: boolean) {
     this.todoService.setIncompleteOnly(filter);
   }
 
-  onChangeStatus(task: Todo, ele: EventTarget | null) {
-    console.log('task.completed :>> ', task.completed);
-    // const checked = (ele as HTMLInputElement).checked;
-    this.todoService.changeStatus(task, !task.completed);
+  onChangeStatus(task: Todo, checked: boolean) {
+    this.todoService.changeStatus(task, checked);
     this.todoService
       .saveChanges(task)
       .subscribe((response) => console.log('save changes: >> ', response));

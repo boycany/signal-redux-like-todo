@@ -1,0 +1,39 @@
+.container {
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 8px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: end;
+}
+
+#loading {
+  margin: auto;
+  width: -webkit-fill-available;
+}
+
+#list-title-row {
+  padding: 8px 12px;
+}
+
+#list-title {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-slide-toggle {
+  margin-top: 8px;
+}
+
+mat-slide-toggle span {
+  margin-right: 8px;
+}
